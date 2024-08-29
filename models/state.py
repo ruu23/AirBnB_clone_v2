@@ -9,11 +9,9 @@ class State(BaseModel, Base):
     """State class definition."""
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="all, delete, delete-orphan")
 
-    if models.storage_type != 'db':
-        @property
-        def cities(self):
-            """Getter attribute that returns the list of City instances."""
-            return [city for city in models.storage.all(City).values() if city.state_id == self.id]
-
+    def __init__(self, *args, **kwargs):
+        """Initialize State."""
+        if 'name' not in kwargs or kwargs['name'] == "":
+            raise ValueError("Name is required for State")
+        super().__init__(*args, **kwargs)

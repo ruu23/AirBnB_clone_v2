@@ -10,3 +10,11 @@ class City(BaseModel, Base):
     name = Column(String(128), nullable=False)
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
 
+
+    def __init__(self, *args, **kwargs):
+        """Initialize City."""
+        if 'name' not in kwargs or kwargs['name'] == "":
+            raise ValueError("Name is required for City")
+        if 'state_id' not in kwargs or kwargs['state_id'] == "":
+            raise ValueError("state_id is required for City")
+        super().__init__(*args, **kwargs)
